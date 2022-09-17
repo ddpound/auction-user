@@ -1,0 +1,68 @@
+plugins {
+    id 'org.springframework.boot' version '2.7.3'
+    id 'io.spring.dependency-management' version '1.0.13.RELEASE'
+    id 'java'
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    set('springCloudVersion', "2021.0.4")
+}
+
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+
+    //implementation 'org.springframework.boot:spring-boot-starter-security'
+    runtimeOnly 'mysql:mysql-connector-java'
+
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    compileOnly 'org.projectlombok:lombok'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+
+
+    // 토큰값 검증받기 위함, 구글 토큰을 검증받기 위해 받은 라이브러리 의존성
+    implementation group: 'com.google.api-client', name: 'google-api-client', version: '1.33.1'
+
+    implementation("com.auth0:java-jwt:3.16.0") //  oauth0, jwt 토큰 사용하기 위함
+    implementation group: 'commons-codec', name: 'commons-codec', version: '1.15'
+
+
+    // json (오브젝트 클래스와 관련해서 필수)
+    implementation group: 'commons-io', name: 'commons-io', version: '2.6'
+    implementation group: 'com.google.code.gson', name: 'gson', version: '2.8.6'
+
+    // 랜덤 문자열을 편하게 하기위한 아파치 공통 라이브러리
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
+
+    // 유레카 클라이언트 등록
+    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
