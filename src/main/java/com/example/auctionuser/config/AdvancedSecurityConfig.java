@@ -1,6 +1,7 @@
 package com.example.auctionuser.config;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -8,7 +9,11 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
 
@@ -19,13 +24,19 @@ import org.springframework.web.filter.CorsFilter;
 @Configuration
 public class AdvancedSecurityConfig {
 
+    @Bean
+    public BCryptPasswordEncoder bCryptPasswordEncoder(){
+        return new BCryptPasswordEncoder();
+    }
+
+    private final CorsFilter corsFilter;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         // session은 안하는걸로 , csrf 끄기
         http
                 .authorizeRequests()
-                .antMatchers("/join/**").permitAll()
+                .antMatchers("/join/**", "/login/**", "/health/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 // cors config 클래스로 설정을 줄꺼여서 그냥 이대로 주석처리
@@ -33,7 +44,7 @@ public class AdvancedSecurityConfig {
                 .formLogin().disable()
                 //.cors().disable()
                 .csrf().disable()
-                //.addFilter(corsFilter) // @CrossOrigin (인증 x), 시큐리티 필터 등록 인증
+                .addFilter(corsFilter) // @CrossOrigin (인증 x), 시큐리티 필터 등록 인증
                 // 기본적인 http 로그인방식도 사용하지않는다.
                 .httpBasic().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
