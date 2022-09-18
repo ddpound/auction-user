@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(value = "auction-user")
+@RequestMapping(value = "/")
 public class HealthController {
 
     @GetMapping(value = "/")
