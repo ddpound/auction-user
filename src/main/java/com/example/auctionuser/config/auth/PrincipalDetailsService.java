@@ -1,7 +1,7 @@
 package com.example.auctionuser.config.auth;
 
-import com.example.auctionuser.model.UserModel;
-import com.example.auctionuser.repository.UserModelRepository;
+import com.example.modulecommon.model.UserModel;
+import com.example.modulecommon.repository.UserModelRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,8 +21,10 @@ public class PrincipalDetailsService implements UserDetailsService {
 
         // 제대로 작동하는지 체크
         log.info("PrincipalDetailsServiceOnline");
+
         UserModel userModel = userModelRepository.findByUsername(username);
 
+        // 작동은 하지만 여기서 따로 검증해줘야하는 로직을 짜야하는듯 싶습니다.
         try {
             if (userModel != null) {
                 // 시큐리티 세션 = Authentication( UserDetails) 이렇게 담겨진다

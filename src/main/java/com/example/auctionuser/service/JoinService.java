@@ -1,8 +1,8 @@
 package com.example.auctionuser.service;
 
 import com.example.auctionuser.jwtutil.JWTUtil;
-import com.example.auctionuser.model.UserModel;
-import com.example.auctionuser.repository.UserModelRepository;
+import com.example.modulecommon.model.UserModel;
+import com.example.modulecommon.repository.UserModelRepository;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;

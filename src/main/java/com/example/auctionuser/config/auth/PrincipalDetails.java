@@ -1,14 +1,16 @@
 package com.example.auctionuser.config.auth;
 
-import com.example.auctionuser.model.UserModel;
-import lombok.Data;
+import com.example.modulecommon.model.UserModel;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
-@Data
+@Getter
+@Setter
 public class PrincipalDetails implements UserDetails {
 
     // 현재 User 값은 아래 UserModel이 들고있기 때문에 가져옴

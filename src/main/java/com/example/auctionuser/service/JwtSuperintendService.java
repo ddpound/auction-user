@@ -1,9 +1,9 @@
 package com.example.auctionuser.service;
 
-import com.example.auctionuser.model.JwtSuperintendModel;
-import com.example.auctionuser.model.UserModel;
-import com.example.auctionuser.repository.JwtSuperintendRepository;
-import com.example.auctionuser.repository.UserModelRepository;
+import com.example.modulecommon.model.JwtSuperintendModel;
+import com.example.modulecommon.model.UserModel;
+import com.example.modulecommon.repository.JwtSuperintendRepository;
+import com.example.modulecommon.repository.UserModelRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;

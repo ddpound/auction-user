@@ -67,6 +67,7 @@ public class JoinLoginController {
         int resultNum = joinService.googleTokenJoinGetHeader(request);
 
         if(resultNum == 1 ){
+            log.info("join success");
             return new ResponseEntity<>( "Your membership registration is complete.", HttpStatus.OK);
         }else {
             return new ResponseEntity<>( "sorry fail join", HttpStatus.INTERNAL_SERVER_ERROR);

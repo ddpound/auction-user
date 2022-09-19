@@ -55,7 +55,11 @@ dependencies {
 
     // 유레카 클라이언트 등록
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+
+    compileOnly project(':module-common')
 }
+
+
 
 dependencyManagement {
     imports {
