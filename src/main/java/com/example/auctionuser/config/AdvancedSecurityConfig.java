@@ -54,7 +54,7 @@ public class AdvancedSecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http , AuthenticationManager authenticationManager) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/join/**", "/login/**", "/health/**").permitAll()
+                .antMatchers("/join/**", "/login/**", "/health/**", "/actuator/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 // cors config 클래스로 설정을 줄꺼여서 그냥 이대로 주석처리

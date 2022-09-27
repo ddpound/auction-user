@@ -38,6 +38,13 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
 
+    // 외부 config.yml 파일을 사용하기 위해서
+    implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap'
+    implementation 'org.springframework.cloud:spring-cloud-starter-config'
+
+    // config yml 파일을 서버 재기동없이 refresh를 위한 actuator 의존성 추가
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
 
     // 토큰값 검증받기 위함, 구글 토큰을 검증받기 위해 받은 라이브러리 의존성
     implementation group: 'com.google.api-client', name: 'google-api-client', version: '1.33.1'
