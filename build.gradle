@@ -45,6 +45,9 @@ dependencies {
     // config yml 파일을 서버 재기동없이 refresh를 위한 actuator 의존성 추가
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
+    // refresh 할 필요없이 자동적으로 해주는 라이브러리
+    implementation 'org.springframework.cloud:spring-cloud-starter-bus-amqp'
+
 
     // 토큰값 검증받기 위함, 구글 토큰을 검증받기 위해 받은 라이브러리 의존성
     implementation group: 'com.google.api-client', name: 'google-api-client', version: '1.33.1'
