@@ -56,9 +56,6 @@ public class JWTCheckFilter extends BasicAuthenticationFilter {
 
         log.info("JWTCheckFilter has been activated.");
 
-
-
-
         String jwtHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
 
         String reFreshJwtHeader = request.getHeader("RefreshToken");

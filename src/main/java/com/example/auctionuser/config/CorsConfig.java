@@ -28,6 +28,11 @@ public class CorsConfig {
         // 권장하지 않는다
         //config.addAllowedOrigin("*"); // 모든 ip 응답을 허용
 
+        // 해당 헤더를 모두 허용해줘야 프론트에서 확인받아서 체크할수있다.
+
+        // jwt 를 담은 헤더를 리액트 쪽에서 확인할수있다는 뜻
+        config.addExposedHeader("*");
+
         config.addAllowedHeader("*"); // 모든 헤더의 응답을 허용
         config.addAllowedMethod("*"); // 모든 post,get 등등의 메소드들을 허용
         source.registerCorsConfiguration("/**", config);
