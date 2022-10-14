@@ -1,4 +1,4 @@
-package com.example.auctionuser.model;
+package com.example.auctionuser.frontmodel;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

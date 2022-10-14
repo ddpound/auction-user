@@ -34,8 +34,6 @@ public class AdvancedSecurityConfig {
     public BCryptPasswordEncoder bCryptPasswordEncoder(){
         return new BCryptPasswordEncoder();
     }
-
-
     /**
      * 필터에서도 써줘야하니 여기서 미리 빈 등록을 해주자
      * */

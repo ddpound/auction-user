@@ -6,11 +6,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
-
 @Configuration
 public class CorsConfig {
-
-
     // 스프링 시큐리티가 들고있는 cors 필터입니다.
     // 프론트쪽에서 계속 막힌게 이녀석 때문
     @Bean
@@ -23,7 +20,7 @@ public class CorsConfig {
         config.setAllowCredentials(true);
 
         // 지금 코드가 위의 setAloowCredentials 와 같이 사용되는걸 권장한다
-        config.addAllowedOriginPattern("*");
+        config.addAllowedOriginPattern("http://localhost:3000");
         // 재밌는 점은 아래 코드는 이제 위의 setAllowCredentials 와 함께 사용하는걸
         // 권장하지 않는다
         //config.addAllowedOrigin("*"); // 모든 ip 응답을 허용

@@ -1,4 +1,4 @@
-package com.example.auctionuser.join;
+package com.example.auctionuser.join.controller;
 
 import com.example.auctionuser.config.auth.PrincipalDetails;
 import com.example.auctionuser.jwtutil.JWTUtil;
@@ -49,6 +49,7 @@ public class JoinLoginController {
 
             jwtSuperintendService.saveCheckTokenRepository(principalDetails.getUsername(),makeMyToken,makeRefleshToken);
 
+            log.info("login success : " + principalDetails.getUsername());
             return new ResponseEntity<>(userService.findUserNameFrontUserModel(principalDetails.getUsername()) , HttpStatus.OK);
             //return "seuccess";
         }catch (NullPointerException e){

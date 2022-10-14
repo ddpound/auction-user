@@ -1,6 +1,6 @@
 package com.example.auctionuser.service;
 
-import com.example.auctionuser.model.UserModelFront;
+import com.example.auctionuser.frontmodel.UserModelFront;
 import com.example.modulecommon.model.UserModel;
 import com.example.modulecommon.repository.JwtSuperintendRepository;
 import com.example.modulecommon.repository.UserModelRepository;
