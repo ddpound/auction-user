@@ -113,37 +113,8 @@ public class JWTCheckFilter extends BasicAuthenticationFilter {
                     resultMapToken = jwtUtil.returnMapMyTokenVerify(reFreshtoken);
 
                 }
-
-
                 // 즉 1 인 key값이 있는지 체크,
                 if(resultMapToken.containsKey(1)){
-
-                    // 리프레쉬 과정중에 에러발생함 찾아내기
-
-                    // 리프레시 토큰이라면 이게 있을것이다
-                    if(resultMapToken.get(1).getClaim("refresh").asString() != null){
-
-                        // 리프레시 토큰, 액세스 토큰 다 DB검색
-                        // 디비에 한쌍으로 검색, 만약 없다면 누가 탈취해서 임의로 값을 넣은걸 의심
-                        UserModel userModel = jwtSuperintendRepository.findByAccessTokenAndRefreshToken(token,reFreshtoken).getUser();
-
-                        String newAccessToken = jwtUtil.makeAuthToken(userModel);
-
-                        //리프레시까지 다시 재발급이아니라 액세스만 재발급해서 다시 DB한쌍에 저장
-                        //String newRefreshToken = loginFilterJWTUtil.makeRfreshToken(userModel);
-
-                        response.addHeader(HttpHeaders.AUTHORIZATION,"Bearer "+ newAccessToken);
-                        response.addHeader("RefreshToken","Bearer "+ reFreshtoken);
-
-                        jwtSuperintendRepository
-                                .updateAcToken(
-                                        newAccessToken,
-                                        userModel
-                                );
-                        resultMapToken = jwtUtil.returnMapMyTokenVerify(newAccessToken);
-                    }
-
-                    // claim 안에 refresh가 있는지 체크해주기
 
                     username  = resultMapToken.get(1).getClaim("username").asString();
 

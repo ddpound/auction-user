@@ -40,7 +40,6 @@ public class AdvancedSecurityConfig {
     @Bean
     public JWTUtil jwtUtil() {return new JWTUtil();}
 
-
     private final CorsFilter corsFilter;
 
     @Bean
@@ -53,6 +52,8 @@ public class AdvancedSecurityConfig {
         http
                 .authorizeRequests()
                 .antMatchers("/join/**", "/login/**", "/health/**", "/actuator/**").permitAll()
+                .antMatchers("/user/**").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN') or hasRole('ROLE_SELLER')")
+                .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
                 .anyRequest().authenticated()
                 .and()
                 // cors config 클래스로 설정을 줄꺼여서 그냥 이대로 주석처리

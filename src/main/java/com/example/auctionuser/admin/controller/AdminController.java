@@ -21,7 +21,7 @@ import java.util.Map;
 @RequestMapping("admin")
 public class AdminController {
 
-    private final AdminService adminService1;
+    private final AdminService adminService;
 
     private final MakeFile makeFile;
 
@@ -36,23 +36,13 @@ public class AdminController {
      * 관리자 권한을 주는 엔드포인트
      *
      * */
-    @PostMapping(value = "give-admin")
-    public ResponseEntity giveMeAdmin(@RequestBody Map<String,Object> passwordMap,
-                                      Authentication authentication){
-        int resultNum = adminService1.giveAdmin(authentication,passwordMap);
 
-        if(resultNum ==1){
-            return new ResponseEntity("success admin auth give",HttpStatus.OK);
-        }else{
-            return new ResponseEntity("fail admin give",HttpStatus.FORBIDDEN);
-        }
-    }
 
     @PostMapping(value = "make-coupon")
     public ResponseEntity makeCoupon(@RequestParam(required = false)String couponNumber){
 
 
-        adminService1.makeCoupon(couponNumber);
+        adminService.makeCoupon(couponNumber);
 
 
         return new ResponseEntity("success make coupon", HttpStatus.OK);
@@ -61,13 +51,13 @@ public class AdminController {
     @GetMapping(value = "find-all-coupon")
     public ResponseEntity findAllCoupon(){
 
-        return new ResponseEntity(adminService1.findAllCoupon(), HttpStatus.OK);
+        return new ResponseEntity(adminService.findAllCoupon(), HttpStatus.OK);
     }
 
     @DeleteMapping(value = "delete-one-coupon/{id}")
     public ResponseEntity deleteOneCoupon(@PathVariable("id")int id){
 
-        adminService1.deleteCoupon(id);
+        adminService.deleteCoupon(id);
 
         return new ResponseEntity("deleteSuccess", HttpStatus.OK);
     }
@@ -95,8 +85,8 @@ public class AdminController {
 
         // 세이브 서비스 붙여주기
 
-        String folderPathName =  adminService1.saveAnnouncementBoardImageFIle(principalDetails.getUserModel().getUserId(),boardData.get("content"));
-        adminService1.saveAnnouncementBoard(
+        String folderPathName =  adminService.saveAnnouncementBoardImageFIle(principalDetails.getUserModel().getUserId(),boardData.get("content"));
+        adminService.saveAnnouncementBoard(
                 IntegrateBoardModel.builder()
                         .title(boardData.get("title"))
                         .Content(boardData.get("content"))

@@ -8,10 +8,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @Log4j2
+@RequestMapping(value = "user")
 @RestController
 public class UserInfoController {
 
@@ -21,7 +23,6 @@ public class UserInfoController {
     public ResponseEntity findUserModelFront(Authentication authentication){
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 
-        log.info("-------------------- info controller On ------------------------");
 
         return new ResponseEntity(userService.findUserNameFrontUserModel(principalDetails.getUsername()), HttpStatus.OK);
     }
