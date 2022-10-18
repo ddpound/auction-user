@@ -1,24 +1,29 @@
 package com.example.auctionuser.service;
 
-import com.example.modulecommon.model.JwtSuperintendModel;
-import com.example.modulecommon.model.UserModel;
-import com.example.modulecommon.repository.JwtSuperintendRepository;
-import com.example.modulecommon.repository.UserModelRepository;
+import com.example.auctionuser.model.UserModel;
+import com.example.auctionuser.repository.UserModelRepository;
+import com.example.modulecommon.jwtutil.JWTUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
+
+import java.util.Collections;
+
 
 @Log4j2
 @RequiredArgsConstructor
 @Service
 public class JwtSuperintendService {
 
-    private final JwtSuperintendRepository jwtSuperintendRepository;
+    // 공통 모듈에 있는 JWTUtil
+    private final JWTUtil jwtUtil;
 
-    private final UserModelRepository userModelRepository;
-
-
+    private final String url = "http://localhost:8000/saveCheckToken";
 
     // 레파지토리를 통해 토큰을 저장할대 사용
     // 이미있다면 수정도 해야함
@@ -27,33 +32,39 @@ public class JwtSuperintendService {
                                         String makeMyToken,
                                         String makeRefleshToken){
 
-        // 저장하기 앞서 먼저 검사부터 해야함 DB에 이미 있는지
+        RestTemplate restTemplate = new RestTemplate();
 
-        // 이미 있는 DB값
-        UserModel userModel =  userModelRepository.findByUsername(getUserName);
+        HttpHeaders headers = new HttpHeaders();
+
+        try {
+            headers.setContentType(MediaType.APPLICATION_JSON);
+
+//            headers.set("Authorization", makeMyToken);
+//            headers.set("RefreshToken", makeRefleshToken);
+//            headers.set("ServerToken", jwtUtil.makeServerAuthToken("username"));
+
+            MultiValueMap<String, String> map= new LinkedMultiValueMap<>();
+            map.add("username", getUserName);
+            map.add("mytoken", makeMyToken);
+            map.add("RefreshToken", makeRefleshToken);
+            map.add("ServerToken", jwtUtil.makeServerAuthToken("username"));
 
 
 
-        JwtSuperintendModel findJwtSuperintendModel = jwtSuperintendRepository.findByUser(userModel);
+            HttpEntity request = new HttpEntity(map,headers);
 
+            ResponseEntity response = restTemplate.exchange(
+                    url,
+                    HttpMethod.POST,
+                    request,
+                    String.class
+            );
 
-        if(findJwtSuperintendModel != null ){
+            System.out.println(response);
+            // restTemplate를 이용해 localhost 8000 을 호출
 
-            // 이미 있는거니깐 수정, 더티체킹
-            findJwtSuperintendModel.setAccessToken(makeMyToken);
-            findJwtSuperintendModel.setRefreshToken(makeRefleshToken);
-            log.info("changeToken");
-            return 2; // 수정을 뜻함
-
-        }else{
-            // 처음이라면 새로저장
-            JwtSuperintendModel jwtSuperintendModel = JwtSuperintendModel.builder()
-                    .user(userModel)
-                    .accessToken(makeMyToken)
-                    .refreshToken(makeRefleshToken)
-                    .build();
-
-            jwtSuperintendRepository.save(jwtSuperintendModel);
+        }catch (Exception e){
+            log.info(e);
         }
 
         return 1;

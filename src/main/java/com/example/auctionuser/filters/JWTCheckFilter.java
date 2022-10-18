@@ -2,10 +2,10 @@ package com.example.auctionuser.filters;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.example.auctionuser.config.auth.PrincipalDetails;
-import com.example.auctionuser.jwtutil.JWTUtil;
-import com.example.modulecommon.model.UserModel;
-import com.example.modulecommon.repository.JwtSuperintendRepository;
-import com.example.modulecommon.repository.UserModelRepository;
+import com.example.auctionuser.jwtutil.UserJWTUtil;
+
+import com.example.auctionuser.model.UserModel;
+import com.example.auctionuser.repository.UserModelRepository;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
@@ -25,23 +25,19 @@ import java.util.Map;
 
 @Log4j2
 public class JWTCheckFilter extends BasicAuthenticationFilter {
-    private final JWTUtil jwtUtil;
+    private final UserJWTUtil userJwtUtil;
 
     private final UserModelRepository userModelRepository;
-
-    private final JwtSuperintendRepository jwtSuperintendRepository;
 
 
 
 
     public JWTCheckFilter(AuthenticationManager authenticationManager,
-                          JWTUtil loginFilterJWTUtil,
-                          UserModelRepository userModelRepository,
-                          JwtSuperintendRepository jwtSuperintendRepository){
+                          UserJWTUtil loginFilterUserJWTUtil,
+                          UserModelRepository userModelRepository){
         super(authenticationManager);
-        this.jwtUtil = loginFilterJWTUtil;
+        this.userJwtUtil = loginFilterUserJWTUtil;
         this.userModelRepository = userModelRepository;
-        this.jwtSuperintendRepository = jwtSuperintendRepository;
     }
 
 
@@ -80,7 +76,7 @@ public class JWTCheckFilter extends BasicAuthenticationFilter {
             //만약 구글 토큰인지도 체크해야함, 구글토큰일때도 넘겨야함
             // 아래 토큰 검사할때 에러가 발생하면 체인이 안넘어감
             // 구글 토큰이면 사전에 dofilter 으로 넘겨줘야함
-            GoogleIdToken.Payload payload = jwtUtil.googleVerify(token);
+            GoogleIdToken.Payload payload = userJwtUtil.googleVerify(token);
             if(payload != null){
                 // 구글 토큰은 필요가 없으니 넘겨주자
                 // 마찬가지로 넘겨주고 끝내버림
@@ -101,7 +97,7 @@ public class JWTCheckFilter extends BasicAuthenticationFilter {
 
             // 1일때 검증완료, -2 면 토큰 만료
             // 이렇게 담아두면 다시 재 검증할 필요가 없음
-            Map<Integer, DecodedJWT> resultMapToken = jwtUtil.returnMapMyTokenVerify(token);
+            Map<Integer, DecodedJWT> resultMapToken = userJwtUtil.returnMapMyTokenVerify(token);
 
             try {
 
@@ -110,7 +106,7 @@ public class JWTCheckFilter extends BasicAuthenticationFilter {
                 // -2 즉 만료일 때
                 if(resultMapToken.containsKey(-2)){
                     // 리프레시 토큰 검증 시작, 값 변경
-                    resultMapToken = jwtUtil.returnMapMyTokenVerify(reFreshtoken);
+                    resultMapToken = userJwtUtil.returnMapMyTokenVerify(reFreshtoken);
 
                 }
                 // 즉 1 인 key값이 있는지 체크,

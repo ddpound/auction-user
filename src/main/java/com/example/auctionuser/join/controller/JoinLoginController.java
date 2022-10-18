@@ -1,7 +1,7 @@
 package com.example.auctionuser.join.controller;
 
 import com.example.auctionuser.config.auth.PrincipalDetails;
-import com.example.auctionuser.jwtutil.JWTUtil;
+import com.example.auctionuser.jwtutil.UserJWTUtil;
 import com.example.auctionuser.service.JoinService;
 import com.example.auctionuser.service.JwtSuperintendService;
 import com.example.auctionuser.service.UserService;
@@ -12,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,7 +27,7 @@ public class JoinLoginController {
 
     private final JoinService joinService;
 
-    private final JWTUtil jwtUtil;
+    private final UserJWTUtil userJwtUtil;
 
     private final JwtSuperintendService jwtSuperintendService;
 
@@ -38,8 +37,8 @@ public class JoinLoginController {
         try {
             PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 
-            String makeMyToken = jwtUtil.makeAuthToken(principalDetails.getUserModel());
-            String makeRefleshToken = jwtUtil.makeRfreshToken(principalDetails.getUserModel());
+            String makeMyToken = userJwtUtil.makeAuthToken(principalDetails.getUserModel());
+            String makeRefleshToken = userJwtUtil.makeRfreshToken(principalDetails.getUserModel());
 
 
             //log.info("make Token : "+makeMyToken);
@@ -47,6 +46,7 @@ public class JoinLoginController {
             response.addHeader("Authorization", "Bearer "+ makeMyToken);
             response.addHeader("RefreshToken","Bearer "+ makeRefleshToken);
 
+            log.info("---------------------------------check ---------------------- => : " + principalDetails.getUsername());
             jwtSuperintendService.saveCheckTokenRepository(principalDetails.getUsername(),makeMyToken,makeRefleshToken);
 
             log.info("login success : " + principalDetails.getUsername());

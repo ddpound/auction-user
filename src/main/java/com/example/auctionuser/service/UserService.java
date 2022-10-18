@@ -1,9 +1,9 @@
 package com.example.auctionuser.service;
 
 import com.example.auctionuser.frontmodel.UserModelFront;
-import com.example.modulecommon.model.UserModel;
-import com.example.modulecommon.repository.JwtSuperintendRepository;
-import com.example.modulecommon.repository.UserModelRepository;
+import com.example.auctionuser.model.UserModel;
+import com.example.auctionuser.repository.UserModelRepository;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -17,8 +17,6 @@ import java.util.List;
 public class UserService {
 
     private final UserModelRepository userModelRepository;
-
-    private final JwtSuperintendRepository jwtSuperintendRepository;
 
     @Transactional(readOnly = true)
     public UserModelFront findUserNameFrontUserModel(String userName){

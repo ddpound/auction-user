@@ -2,9 +2,9 @@ package com.example.auctionuser.filters;
 
 
 import com.example.auctionuser.config.auth.PrincipalDetails;
-import com.example.auctionuser.jwtutil.JWTUtil;
-import com.example.modulecommon.model.UserModel;
-import com.example.modulecommon.repository.UserModelRepository;
+import com.example.auctionuser.jwtutil.UserJWTUtil;
+import com.example.auctionuser.model.UserModel;
+import com.example.auctionuser.repository.UserModelRepository;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
@@ -32,13 +32,13 @@ public class JWTLoginFilter extends UsernamePasswordAuthenticationFilter {
 
     private final UserModelRepository userModelRepository;
 
-    private final JWTUtil jwtUtil;
+    private final UserJWTUtil userJwtUtil;
 
     public JWTLoginFilter(AuthenticationManager authenticationManager,
-                          JWTUtil jwtUtil,UserModelRepository userModelRepository){
+                          UserJWTUtil userJwtUtil, UserModelRepository userModelRepository){
 
         this.authenticationManager = authenticationManager;
-        this.jwtUtil = jwtUtil;
+        this.userJwtUtil = userJwtUtil;
         this.userModelRepository =userModelRepository;
         setFilterProcessesUrl("/login/**");
     }
@@ -60,7 +60,7 @@ public class JWTLoginFilter extends UsernamePasswordAuthenticationFilter {
 
             try {
 
-                GoogleIdToken.Payload googlepayload = jwtUtil.googleVerify(headerAuth.substring("Bearer ".length()));
+                GoogleIdToken.Payload googlepayload = userJwtUtil.googleVerify(headerAuth.substring("Bearer ".length()));
 
                 // 구글 토큰 구조 체크를 위해
                 //System.out.println(loginFilterJWTUtil.simpleDecode(headerAuth.substring("Bearer ".length())).getClaims());
@@ -71,7 +71,7 @@ public class JWTLoginFilter extends UsernamePasswordAuthenticationFilter {
                 String username = googlepayload.getEmail();
                 // 프론트 앤드 .env에도 비밀번호 저장해두고 사용할 예정
                 UsernamePasswordAuthenticationToken authenticationToken =
-                        new UsernamePasswordAuthenticationToken(username , jwtUtil.getUserSecretKey());
+                        new UsernamePasswordAuthenticationToken(username , userJwtUtil.getUserSecretKey());
 
                 // principalDetails의 loadUserByUsername() 함수를 찾아 실행함
                 // 이게 loadUserByUsername()이 올바르게 작동하고 리턴값이 있다면
@@ -95,8 +95,7 @@ public class JWTLoginFilter extends UsernamePasswordAuthenticationFilter {
                 // 리턴을 올바르게 해주면 세션에 저장됨
                 log.info("login success");
 
-
-                UserModel userModel =  userModelRepository.findByUsername(username);
+                UserModel userModel = userModelRepository.findByUsername(username);
 
 
                 PrincipalDetails principalDetails = new PrincipalDetails(userModel);

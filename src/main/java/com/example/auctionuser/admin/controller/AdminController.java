@@ -1,10 +1,11 @@
 package com.example.auctionuser.admin.controller;
 
 import com.example.auctionuser.config.auth.PrincipalDetails;
+import com.example.auctionuser.model.IntegrateBoardModel;
 import com.example.auctionuser.service.AdminService;
 import com.example.modulecommon.enums.AdminBoardCategory;
 import com.example.modulecommon.makefile.MakeFile;
-import com.example.modulecommon.model.IntegrateBoardModel;
+
 import com.google.gson.JsonObject;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -72,7 +73,7 @@ public class AdminController {
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 
 
-        return makeFile.makeTemporaryfiles(multipartFile,principalDetails.getUserModel(),request);
+        return makeFile.makeTemporaryfiles(multipartFile,principalDetails.getUserModel().getUserId(),request);
     }
 
     @PostMapping(value = "save-announcement-board", produces = "application/json")

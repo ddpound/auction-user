@@ -2,9 +2,8 @@ package com.example.auctionuser.config;
 
 import com.example.auctionuser.filters.JWTCheckFilter;
 import com.example.auctionuser.filters.JWTLoginFilter;
-import com.example.auctionuser.jwtutil.JWTUtil;
-import com.example.modulecommon.repository.JwtSuperintendRepository;
-import com.example.modulecommon.repository.UserModelRepository;
+import com.example.auctionuser.jwtutil.UserJWTUtil;
+import com.example.auctionuser.repository.UserModelRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,8 +27,6 @@ public class AdvancedSecurityConfig {
 
     private final UserModelRepository userModelRepository;
 
-    private final JwtSuperintendRepository jwtSuperintendRepository;
-
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder(){
         return new BCryptPasswordEncoder();
@@ -38,7 +35,7 @@ public class AdvancedSecurityConfig {
      * 필터에서도 써줘야하니 여기서 미리 빈 등록을 해주자
      * */
     @Bean
-    public JWTUtil jwtUtil() {return new JWTUtil();}
+    public UserJWTUtil jwtUtil() {return new UserJWTUtil();}
 
     private final CorsFilter corsFilter;
 
@@ -67,8 +64,7 @@ public class AdvancedSecurityConfig {
                 .addFilter(new JWTLoginFilter(authenticationManager, jwtUtil(),userModelRepository))
                 .addFilter(new JWTCheckFilter(authenticationManager,
                         jwtUtil(),
-                        userModelRepository,
-                        jwtSuperintendRepository))
+                        userModelRepository))
                 // session은 안하는걸로 , csrf 끄기
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 

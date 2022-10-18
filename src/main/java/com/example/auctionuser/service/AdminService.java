@@ -2,16 +2,17 @@ package com.example.auctionuser.service;
 
 import com.example.auctionuser.config.auth.PrincipalDetails;
 import com.example.auctionuser.frontmodel.SellerCouponFront;
+import com.example.auctionuser.model.IntegrateBoardModel;
+import com.example.auctionuser.model.SellerCoupon;
+import com.example.auctionuser.model.UserModel;
+import com.example.auctionuser.repository.IntegrateBoardRepository;
+import com.example.auctionuser.repository.SellerCouponRepository;
+import com.example.auctionuser.repository.UserModelRepository;
 import com.example.modulecommon.allstatic.AllStaticStatus;
 import com.example.modulecommon.enums.AdminBoardCategory;
 import com.example.modulecommon.enums.AuthNames;
 import com.example.modulecommon.makefile.MakeFile;
-import com.example.modulecommon.model.IntegrateBoardModel;
-import com.example.modulecommon.model.SellerCoupon;
-import com.example.modulecommon.model.UserModel;
-import com.example.modulecommon.repository.IntegrateBoardRepository;
-import com.example.modulecommon.repository.SellerCouponRepository;
-import com.example.modulecommon.repository.UserModelRepository;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.RandomStringUtils;

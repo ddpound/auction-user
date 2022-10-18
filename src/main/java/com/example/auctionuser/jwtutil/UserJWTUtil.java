@@ -5,7 +5,8 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.example.modulecommon.model.UserModel;
+
+import com.example.auctionuser.model.UserModel;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.http.javanet.NetHttpTransport;
@@ -28,7 +29,7 @@ import java.util.Map;
  * */
 @Log4j2
 @Getter
-public class JWTUtil {
+public class UserJWTUtil {
 
     @Value("${googlelogin.googleClientId}")
     private String googleClientId;
@@ -60,7 +61,6 @@ public class JWTUtil {
                 .withSubject(user.getUsername())
                 .withIssuer("nowAuction")
                 .withClaim("username", user.getUsername()) // 유저이름
-                .withClaim("userRole",user.getRoleList())
                 .withClaim("exp", Instant.now().getEpochSecond()+AUTH_TIME)
                 .sign(Algorithm.HMAC256(myKey));
 

@@ -1,6 +1,7 @@
 package com.example.auctionuser.config.auth;
 
-import com.example.modulecommon.model.UserModel;
+
+import com.example.auctionuser.model.UserModel;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
