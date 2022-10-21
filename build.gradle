@@ -65,6 +65,9 @@ dependencies {
     // 유레카 클라이언트 등록
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
 
+    // Feign Client 등록, Rest Template를 좀 더 쓰기 쉽게 사용
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+
     compileOnly project(':module-common')
 }
 

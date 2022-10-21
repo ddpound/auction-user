@@ -61,6 +61,7 @@ public class UserJWTUtil {
                 .withSubject(user.getUsername())
                 .withIssuer("nowAuction")
                 .withClaim("username", user.getUsername()) // 유저이름
+                .withClaim("userId", user.getUserId()) // 유저 아이디
                 .withClaim("exp", Instant.now().getEpochSecond()+AUTH_TIME)
                 .sign(Algorithm.HMAC256(myKey));
 

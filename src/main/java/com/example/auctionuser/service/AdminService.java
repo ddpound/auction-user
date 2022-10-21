@@ -1,7 +1,7 @@
 package com.example.auctionuser.service;
 
 import com.example.auctionuser.config.auth.PrincipalDetails;
-import com.example.auctionuser.frontmodel.SellerCouponFront;
+
 import com.example.auctionuser.model.IntegrateBoardModel;
 import com.example.auctionuser.model.SellerCoupon;
 import com.example.auctionuser.model.UserModel;
@@ -11,6 +11,7 @@ import com.example.auctionuser.repository.UserModelRepository;
 import com.example.modulecommon.allstatic.AllStaticStatus;
 import com.example.modulecommon.enums.AdminBoardCategory;
 import com.example.modulecommon.enums.AuthNames;
+import com.example.modulecommon.frontModel.SellerCouponFront;
 import com.example.modulecommon.makefile.MakeFile;
 
 import lombok.RequiredArgsConstructor;

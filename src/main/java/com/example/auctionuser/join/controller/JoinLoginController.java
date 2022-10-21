@@ -46,11 +46,10 @@ public class JoinLoginController {
             response.addHeader("Authorization", "Bearer "+ makeMyToken);
             response.addHeader("RefreshToken","Bearer "+ makeRefleshToken);
 
-            log.info("---------------------------------check ---------------------- => : " + principalDetails.getUsername());
             jwtSuperintendService.saveCheckTokenRepository(principalDetails.getUsername(),makeMyToken,makeRefleshToken);
 
             log.info("login success : " + principalDetails.getUsername());
-            return new ResponseEntity<>(userService.findUserNameFrontUserModel(principalDetails.getUsername()) , HttpStatus.OK);
+            return new ResponseEntity<>(userService.findUserNameFrontUserModel(principalDetails.getUsername(),true) , HttpStatus.OK);
             //return "seuccess";
         }catch (NullPointerException e){
             log.info("principalDetails is null, LoginController");
