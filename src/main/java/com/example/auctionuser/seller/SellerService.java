@@ -31,7 +31,7 @@ public class SellerService {
         String jwtHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
         String token = jwtHeader.replace("Bearer ", "");
 
-        DecodedJWT decodedJWT = jwtUtil.getTokenRole(token);
+        DecodedJWT decodedJWT = jwtUtil.getTokenAndVerify(token);
 
         System.out.println(decodedJWT.getClaim("username").asString());
 

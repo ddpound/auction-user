@@ -60,7 +60,7 @@ public class JwtSuperintendService {
                     String.class
             );
 
-            System.out.println(response);
+            //System.out.println(response);
             // restTemplate를 이용해 localhost 8000 을 호출
 
         }catch (Exception e){
