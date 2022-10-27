@@ -77,7 +77,6 @@ public class JWTLoginFilter extends UsernamePasswordAuthenticationFilter {
                 // 이게 loadUserByUsername()이 올바르게 작동하고 리턴값이 있다면
                 // 올바르게 로그인했다는 뜻
                 log.info("logiun try....");
-                log.info("test" + authenticationManager);
 
                 // 여기 담겨야지 로그인 성공
 //                Authentication authentication =
@@ -93,7 +92,7 @@ public class JWTLoginFilter extends UsernamePasswordAuthenticationFilter {
                 //log.info("principalDetails : " + principalDetails.getUserModel().getUsername());
 
                 // 리턴을 올바르게 해주면 세션에 저장됨
-                log.info("login success");
+
 
                 UserModel userModel = userModelRepository.findByUsername(username);
 
@@ -108,8 +107,7 @@ public class JWTLoginFilter extends UsernamePasswordAuthenticationFilter {
                 // 세션 공간, 강제로 시큐리티 세션에 접근, Authentication 객체를 저장
                 SecurityContextHolder.getContext().setAuthentication(authentication);
 
-
-
+                log.info("login success");
 
                 return authentication;
 
@@ -149,5 +147,7 @@ public class JWTLoginFilter extends UsernamePasswordAuthenticationFilter {
         // 이게 있어야 필터가 다음값으로 넘어가줌
         chain.doFilter(request,response);
     }
+
+
 
 }

@@ -47,26 +47,28 @@ public class AdvancedSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http , AuthenticationManager authenticationManager) throws Exception {
         http
-                .authorizeRequests()
-                .antMatchers("/join/**", "/login/**", "/health/**", "/actuator/**").permitAll()
-                .antMatchers("/user/**").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN') or hasRole('ROLE_SELLER')")
-                .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
-                .anyRequest().authenticated()
+                .csrf().disable()
+                // session은 안하는걸로 , csrf 끄기
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 // cors config 클래스로 설정을 줄꺼여서 그냥 이대로 주석처리
                 // 유저 패스워드 값으로 로그인을 진행 안함 , 폼로그인 x
-                .formLogin().disable()
                 //.cors().disable()
-                .csrf().disable()
                 .addFilter(corsFilter) // @CrossOrigin (인증 x), 시큐리티 필터 등록 인증
                 // 기본적인 http 로그인방식도 사용하지않는다.
                 .httpBasic().disable()
+                .formLogin().disable()
                 .addFilter(new JWTLoginFilter(authenticationManager, jwtUtil(),userModelRepository))
                 .addFilter(new JWTCheckFilter(authenticationManager,
                         jwtUtil(),
                         userModelRepository))
-                // session은 안하는걸로 , csrf 끄기
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                .authorizeRequests()
+                //.antMatchers("/join/**", "/login/**", "/health/**", "/actuator/**", "/auth/**").permitAll()
+                .antMatchers("/user/**").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN') or hasRole('ROLE_SELLER')")
+                .antMatchers("/seller/**").access("hasRole('ROLE_ADMIN')")
+                .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
+                .antMatchers("/error/**").authenticated()
+                .anyRequest().hasIpAddress("192.168.219.104");
 
 
         return http.build();

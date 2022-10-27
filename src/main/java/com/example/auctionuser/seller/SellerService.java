@@ -1,5 +1,6 @@
 package com.example.auctionuser.seller;
 
+import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.example.auctionuser.model.SellerCoupon;
 import com.example.auctionuser.model.UserModel;
@@ -31,11 +32,7 @@ public class SellerService {
         String jwtHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
         String token = jwtHeader.replace("Bearer ", "");
 
-        DecodedJWT decodedJWT = jwtUtil.getTokenAndVerify(token);
-
-        System.out.println(decodedJWT.getClaim("username").asString());
-
-        UserModel userModel = userModelRepository.findByUsername(decodedJWT.getClaim("username").asString());
+        UserModel userModel = userModelRepository.findByUsername(JWT.decode(token).getClaim("username").asString());
 
         SellerCoupon findSellerCoupon = null;
         try {

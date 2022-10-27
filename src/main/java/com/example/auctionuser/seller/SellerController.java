@@ -14,7 +14,6 @@ import java.util.Map;
 
 @Log4j2
 @RequiredArgsConstructor
-@RequestMapping(value = "seller")
 @RestController
 public class SellerController {
 

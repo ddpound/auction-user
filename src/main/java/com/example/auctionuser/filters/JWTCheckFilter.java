@@ -57,12 +57,12 @@ public class JWTCheckFilter extends BasicAuthenticationFilter {
 
         String reFreshJwtHeader = request.getHeader("RefreshToken");
 
-
-
+        log.info(jwtHeader);
+        log.info(reFreshJwtHeader);
         //System.out.println("테스트 헤더값체크 : " + jwtHeader);
         // 늘 리프레시와 액세스를 동시에 받아야함
-        if(jwtHeader == null || !jwtHeader.startsWith("Bearer")
-                || reFreshJwtHeader == null || !reFreshJwtHeader.startsWith("Bearer")){
+        if(jwtHeader == null || !jwtHeader.startsWith("Bearer ")
+                || reFreshJwtHeader == null || !reFreshJwtHeader.startsWith("Bearer ")){
             log.info("This request have not token");
             chain.doFilter(request, response);
         }else{
@@ -99,8 +99,6 @@ public class JWTCheckFilter extends BasicAuthenticationFilter {
 
             chain.doFilter(request,response);
         }
-
-
 
     }
 
