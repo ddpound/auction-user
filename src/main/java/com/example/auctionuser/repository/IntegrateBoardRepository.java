@@ -12,5 +12,6 @@ public interface IntegrateBoardRepository extends JpaRepository<IntegrateBoardMo
 
     List<IntegrateBoardModel> findAllByAdminBoardCategory(AdminBoardCategory adminBoardCategory);
 
+    void deleteById(int id);
 
 }

@@ -76,17 +76,23 @@ public class AdminController {
         return makeFile.makeTemporaryfiles(multipartFile,principalDetails.getUserModel().getUserId(),request);
     }
 
-    @PostMapping(value = "save-announcement-board", produces = "application/json")
+    @PostMapping(value = "save-announcement-board/{modify}", produces = "application/json")
     public ResponseEntity saveAnnouncementBoard(@RequestBody Map<String,String> boardData,
                                                 Authentication authentication,
-                                                HttpServletRequest request){
+                                                HttpServletRequest request,
+                                                @PathVariable(value = "modify",required = false )boolean modify){
 
         PrincipalDetails principalDetails =(PrincipalDetails) authentication.getPrincipal();
 
+        // 수정이아닐 때
+        int boardId = -2;
 
-        // 세이브 서비스 붙여주기
+        if( boardData.get("id") != null){
+            boardId = Integer.parseInt(boardData.get("id"));
+        }
 
         String folderPathName =  adminService.saveAnnouncementBoardImageFIle(principalDetails.getUserModel().getUserId(),boardData.get("content"));
+
         adminService.saveAnnouncementBoard(
                 IntegrateBoardModel.builder()
                         .title(boardData.get("title"))
@@ -95,12 +101,24 @@ public class AdminController {
                         .adminBoardCategory(AdminBoardCategory.Announcemnet)
                         .build(),
                 folderPathName,
-                request
+                request,
+                modify,
+                boardId
         );
 
 
         return new ResponseEntity<>("OK",HttpStatus.OK);
     }
 
+    @DeleteMapping(value = "delete-announcement-board/{id}")
+    public ResponseEntity deleteBoardById(@PathVariable(value = "id") int id){
+
+        int resultNum = adminService.deleteBoardById(id);
+        if(resultNum ==1 ){
+            return new ResponseEntity<>("success delete board",HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>("fail delete",HttpStatus.BAD_REQUEST);
+    }
 
 }

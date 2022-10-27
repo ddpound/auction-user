@@ -165,7 +165,11 @@ public class AdminService {
     }
 
     @Transactional
-    public void saveAnnouncementBoard(IntegrateBoardModel boardModel, String folderNamePath, HttpServletRequest request) {
+    public void saveAnnouncementBoard(IntegrateBoardModel boardModel,
+                                      String folderNamePath,
+                                      HttpServletRequest request,
+                                      boolean modify,
+                                      Integer boardId) {
 
         // 배포때는 수정해야할 듯
         String mainurl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/";
@@ -185,8 +189,27 @@ public class AdminService {
         String changeBoardContent = boardModel.getContent().replace(changeTargetFolderPath, changeFolderPath);
         boardModel.setContent(changeBoardContent);
 
+        // 수정작업 들어감
+        if(boardId != -2 && modify){
+            // 영속화
+            Optional<IntegrateBoardModel> integrateBoardModel =  integrateBoardRepository.findById(boardId);
 
-        integrateBoardRepository.save(boardModel);
+            // 더티체킹
+            integrateBoardModel.get().setContent(boardModel.getContent());
+            integrateBoardModel.get().setTitle(boardModel.getTitle());
+        }else{
+            integrateBoardRepository.save(boardModel);
+        }
+
+    }
+
+    @Transactional
+    public int deleteBoardById(int id){
+
+        log.info("success delete admin board id : " + id);
+        integrateBoardRepository.deleteById(id);
+
+        return 1;
     }
 
     // 카테고리별로 가져올수 있는 통합 메소드
@@ -212,6 +235,7 @@ public class AdminService {
         integrateBoardModel.get().getUserModel().setPassword("");
         return integrateBoardModel;
     }
+
 
 
 }
