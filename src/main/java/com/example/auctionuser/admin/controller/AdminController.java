@@ -98,6 +98,7 @@ public class AdminController {
                         .title(boardData.get("title"))
                         .Content(boardData.get("content"))
                         .userModel(principalDetails.getUserModel())
+                        .filefolderPath(folderPathName)
                         .adminBoardCategory(AdminBoardCategory.Announcemnet)
                         .build(),
                 folderPathName,
@@ -111,9 +112,9 @@ public class AdminController {
     }
 
     @DeleteMapping(value = "delete-announcement-board/{id}")
-    public ResponseEntity deleteBoardById(@PathVariable(value = "id") int id){
+    public ResponseEntity deleteBoardById(@PathVariable(value = "id") int id, HttpServletRequest request){
 
-        int resultNum = adminService.deleteBoardById(id);
+        int resultNum = adminService.deleteBoardById(id, request);
         if(resultNum ==1 ){
             return new ResponseEntity<>("success delete board",HttpStatus.OK);
         }

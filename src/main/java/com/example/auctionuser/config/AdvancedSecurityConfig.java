@@ -68,7 +68,7 @@ public class AdvancedSecurityConfig {
                 .antMatchers("/seller/**").access("hasRole('ROLE_ADMIN')")
                 .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
                 .antMatchers("/error/**").authenticated()
-                .anyRequest().hasIpAddress("192.168.219.104");
+                .anyRequest().hasIpAddress("192.168.219.105");
 
 
         return http.build();

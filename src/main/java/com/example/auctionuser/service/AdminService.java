@@ -14,10 +14,12 @@ import com.example.modulecommon.enums.AuthNames;
 import com.example.modulecommon.frontModel.SellerCouponFront;
 import com.example.modulecommon.makefile.MakeFile;
 
+import com.example.modulecommon.token.ReturnTokenUsername;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -38,6 +40,8 @@ public class AdminService {
     private final SellerCouponRepository sellerCouponRepository;
 
     private final IntegrateBoardRepository integrateBoardRepository;
+
+    private final ReturnTokenUsername returnTokenUsername;
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -174,6 +178,8 @@ public class AdminService {
         // 배포때는 수정해야할 듯
         String mainurl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/";
 
+        Map<Integer, String> returnFileResult = null;
+
         // http://localhost:5000/Temporrary_files/1/ 까지의 파일경로를 변경해주자
         String changeTargetFolderPath
                 = mainurl + AllStaticStatus.temporaryImageFiles.substring(
@@ -203,13 +209,44 @@ public class AdminService {
 
     }
 
+    /**
+     * 삭제 메소드
+     * 글쓰기에 사용된 파일도 삭제됨
+     * */
     @Transactional
-    public int deleteBoardById(int id){
+    public int deleteBoardById(int id, HttpServletRequest request){
 
-        log.info("success delete admin board id : " + id);
-        integrateBoardRepository.deleteById(id);
+        String jwtHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+        String jwtRHeader = request.getHeader("RefreshToken");
 
-        return 1;
+        String token = jwtHeader.replace("Bearer ", "");
+
+        Map<Integer, Object> returnMapUserData = returnTokenUsername.tokenGetUsername(request);
+
+        Optional<IntegrateBoardModel> findIntegrateBoardModel = integrateBoardRepository.findById(id);
+
+        try{
+            if(findIntegrateBoardModel.isPresent()){
+                log.info("success delete admin board id : " + id);
+
+                // 파일도 같이 삭제
+                if(findIntegrateBoardModel.get().getFilefolderPath().length() >0){
+                    makeFile.folderPathImageDelete(findIntegrateBoardModel.get().getFilefolderPath());
+                }
+
+                integrateBoardRepository.deleteById(id);
+
+                return 1;
+            }else{
+
+                log.error("Not Found Delete Board");
+                return -1;
+            }
+        }catch (Exception e){
+            log.error(e);
+            return -1;
+        }
+
     }
 
     // 카테고리별로 가져올수 있는 통합 메소드
