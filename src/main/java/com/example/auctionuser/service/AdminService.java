@@ -257,7 +257,7 @@ public class AdminService {
 
         for (IntegrateBoardModel intergrateBoard : integrateBoardRepository.findAllByAdminBoardCategory(adminBoardCategory)
         ) {
-            intergrateBoard.getUserModel().setPassword("");
+            intergrateBoard.setUserModel(null);
             arrayList.add(intergrateBoard);
         }
 
@@ -268,8 +268,8 @@ public class AdminService {
     public Optional<IntegrateBoardModel> findAnnouncementBoard(int boardId) {
 
         Optional<IntegrateBoardModel> integrateBoardModel = integrateBoardRepository.findById(boardId);
+        integrateBoardModel.ifPresent(integrateBoardModel1 -> integrateBoardModel.get().setUserModel(null));
 
-        integrateBoardModel.get().getUserModel().setPassword("");
         return integrateBoardModel;
     }
 
