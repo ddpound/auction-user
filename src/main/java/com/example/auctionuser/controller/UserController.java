@@ -30,7 +30,7 @@ public class UserController {
                                                      @RequestParam(value="userId", required=false)int userId,
                                                      @RequestParam(value="nickName", required=false)String nickName,
                                                      @RequestParam(value="boardId", required=false)int boardId){
-
+        System.out.println("여기까지 왜안옴?");
         int resultNum = auctionSellerBoardReplyService.saveReply(content,userId,nickName,boardId,request);
 
         if(resultNum == 1){
