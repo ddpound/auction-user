@@ -25,12 +25,18 @@ public class UserController {
      * 유저가 판매자의 댓글 작성에 사용할 엔드포인트
      * */
     @PostMapping("save-reply")
-    public ResponseEntity saveSellerCommonBoardReply(HttpServletRequest request,
+    public ResponseEntity<String> saveSellerCommonBoardReply(HttpServletRequest request,
                                                      @RequestParam(value="content", required=false)String content,
                                                      @RequestParam(value="userId", required=false)int userId,
                                                      @RequestParam(value="nickName", required=false)String nickName,
                                                      @RequestParam(value="boardId", required=false)int boardId){
-        System.out.println("여기까지 왜안옴?");
+        System.out.println("컨트롤러 지나감?");
+
+        if(content.length() ==0 || userId <0 || nickName.length() <= 0 || boardId < 0){
+            log.info("request save Reply is null value");
+            return new ResponseEntity<String>("null value", HttpStatus.BAD_REQUEST);
+        }
+
         int resultNum = auctionSellerBoardReplyService.saveReply(content,userId,nickName,boardId,request);
 
         if(resultNum == 1){

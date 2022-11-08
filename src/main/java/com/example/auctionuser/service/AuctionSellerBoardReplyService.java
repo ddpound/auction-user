@@ -1,6 +1,7 @@
 package com.example.auctionuser.service;
 
 import com.example.auctionuser.sellerinterface.AuctionSellerInterface;
+import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpHeaders;
@@ -21,22 +22,26 @@ public class AuctionSellerBoardReplyService {
                          String nickName,
                          int commonModelId,
                          HttpServletRequest request){
-        System.out.println("여기까지 왜안옴?2");
+        System.out.println("서비스까지 들어옴");
 
-        String jwtHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-        String jwtRHeader = request.getHeader("RefreshToken");
 
-        String token = jwtHeader.replace("Bearer ", "");
-        String reToken = jwtHeader.replace("Bearer ", "");
 
         try{
-            ResponseEntity responseValue =  auctionSellerInterface.saveReply(token,reToken,request,content,userId,nickName,commonModelId);
+            String jwtHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+            String jwtRHeader = request.getHeader("RefreshToken");
+
+            String token = jwtHeader.replace("Bearer ", "");
+            String reToken = jwtHeader.replace("Bearer ", "");
+
+            ResponseEntity<String> responseValue =  auctionSellerInterface.saveReply(token,reToken,content,userId,nickName,commonModelId);
+
             System.out.println("여기까지 왜안옴?3");
+
             if(responseValue.getStatusCode().value() == 200){
                 return 1;
             }
         }catch (Exception e){
-            log.info(e);
+            log.error(e.getMessage());
         }
 
         return -1;
