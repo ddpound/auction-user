@@ -86,7 +86,7 @@ public class JWTCheckFilter extends BasicAuthenticationFilter {
                         new UsernamePasswordAuthenticationToken(principalDetails, null, principalDetails.getAuthorities());
 
                     // 세션 공간, 강제로 시큐리티 세션에 접근, Authentication 객체를 저장
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
 
             }catch (NullPointerException e){
                 // 토큰,리프레시 토큰 검색시 결과값이 없을때 , 회원가입을 다시해야하거나

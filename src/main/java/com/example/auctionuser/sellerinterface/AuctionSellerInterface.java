@@ -15,5 +15,16 @@ public interface AuctionSellerInterface {
                                      @RequestParam(value="content", required=false)String content,
                                      @RequestParam(value="userId", required=false)int userId,
                                      @RequestParam(value="nickName", required=false)String nickName,
+                                     @RequestParam(value="userPicture", required=false)String userPicture,
                                      @RequestParam(value="boardId", required=false)int boardId);
+
+    @RequestMapping(method = RequestMethod.POST, value = "/seller/save-reply/of-reply", consumes = "application/json")
+    ResponseEntity<String> saveReplyOfReply(@RequestHeader("Authorization")String token,
+                                            @RequestHeader("RefreshToken") String reToken,
+                                            @RequestParam(value="content", required=false)String content,
+                                            @RequestParam(value="userId", required=false)int userId,
+                                            @RequestParam(value="nickName", required=false)String nickName,
+                                            @RequestParam(value="userPicture", required=false)String userPicture,
+                                            @RequestParam(value="boardId", required=false)int boardId,
+                                            @RequestParam(value="replyId", required=false)int replyId);
 }

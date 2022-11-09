@@ -5,10 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -29,20 +26,43 @@ public class UserController {
                                                      @RequestParam(value="content", required=false)String content,
                                                      @RequestParam(value="userId", required=false)int userId,
                                                      @RequestParam(value="nickName", required=false)String nickName,
+                                                     @RequestParam(value="userPicture", required=false)String userPicture,
                                                      @RequestParam(value="boardId", required=false)int boardId){
-        System.out.println("컨트롤러 지나감?");
 
         if(content.length() ==0 || userId <0 || nickName.length() <= 0 || boardId < 0){
             log.info("request save Reply is null value");
             return new ResponseEntity<String>("null value", HttpStatus.BAD_REQUEST);
         }
 
-        int resultNum = auctionSellerBoardReplyService.saveReply(content,userId,nickName,boardId,request);
+        int resultNum = auctionSellerBoardReplyService.saveReply(content,userId,nickName,userPicture,boardId,request);
 
         if(resultNum == 1){
             return new ResponseEntity<String>("Success Save Reply", HttpStatus.OK);
         }
 
         return new ResponseEntity<String>("FailSaveReply", HttpStatus.BAD_REQUEST);
+    }
+
+    @PostMapping( value = "save-reply/of-reply")
+    ResponseEntity<String> saveReplyOfReply(HttpServletRequest request,
+                                            @RequestParam(value="content", required=false)String content,
+                                            @RequestParam(value="userId", required=false)int userId,
+                                            @RequestParam(value="nickName", required=false)String nickName,
+                                            @RequestParam(value="userPicture", required=false)String userPicture,
+                                            @RequestParam(value="boardId", required=false)int boardId,
+                                            @RequestParam(value="replyId", required=false)int replyId){
+
+        if(content.length() ==0 || userId <0 || nickName.length() <= 0 || boardId < 0){
+            log.info("request save Reply is null value");
+            return new ResponseEntity<String>("null value", HttpStatus.BAD_REQUEST);
+        }
+
+        int resultNum = auctionSellerBoardReplyService.saveReplyOfReply(content,userId,nickName,userPicture,boardId,replyId,request);
+
+        if(resultNum == 1){
+            return new ResponseEntity<String>("Success Save Reply", HttpStatus.OK);
+        }
+
+        return new ResponseEntity<String>("FailSaveReplyofReply", HttpStatus.BAD_REQUEST);
     }
 }
