@@ -44,6 +44,18 @@ public class AuctionSellerBoardReplyService {
         return -1;
     }
 
+    public int deleteReply(int replyId, HttpServletRequest request){
+        String jwtHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+        String jwtRHeader = request.getHeader("RefreshToken");
+
+        ResponseEntity<String> responseValue =  auctionSellerInterface.deleteReply(jwtHeader,jwtRHeader,replyId);
+
+        if(responseValue.getStatusCode().value() == 200){
+            return 1;
+        }
+        return -1;
+    }
+
     public int saveReplyOfReply(String content,
                          int userId,
                          String nickName,
@@ -71,4 +83,19 @@ public class AuctionSellerBoardReplyService {
 
         return -1;
     }
+
+    public int deleteReplyOfReply(int replyId, HttpServletRequest request){
+        String jwtHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+        String jwtRHeader = request.getHeader("RefreshToken");
+
+        ResponseEntity<String> responseValue =  auctionSellerInterface.deleteReplyOfReply(jwtHeader,jwtRHeader,replyId);
+
+        if(responseValue.getStatusCode().value() == 200){
+            return 1;
+        }
+        return -1;
+    }
+
+
+
 }

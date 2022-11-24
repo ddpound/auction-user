@@ -43,14 +43,26 @@ public class UserController {
         return new ResponseEntity<String>("FailSaveReply", HttpStatus.BAD_REQUEST);
     }
 
+    @DeleteMapping( value = "delete-reply/{id}")
+    ResponseEntity<String> deleteReply(HttpServletRequest request,
+                                       @PathVariable(value = "id")Integer replyId){
+        int resultNum = auctionSellerBoardReplyService.deleteReply(replyId,request);
+
+        if(resultNum == 1){
+            return new ResponseEntity<String>("Success delete Reply", HttpStatus.OK);
+        }
+
+        return new ResponseEntity<String>("Fail Delete Reply", HttpStatus.BAD_REQUEST);
+    }
+
     @PostMapping( value = "save-reply/of-reply")
-    ResponseEntity<String> saveReplyOfReply(HttpServletRequest request,
-                                            @RequestParam(value="content", required=false)String content,
-                                            @RequestParam(value="userId", required=false)int userId,
-                                            @RequestParam(value="nickName", required=false)String nickName,
-                                            @RequestParam(value="userPicture", required=false)String userPicture,
-                                            @RequestParam(value="boardId", required=false)int boardId,
-                                            @RequestParam(value="replyId", required=false)int replyId){
+    ResponseEntity<String> deleteReply(HttpServletRequest request,
+                                       @RequestParam(value="content", required=false)String content,
+                                       @RequestParam(value="userId", required=false)int userId,
+                                       @RequestParam(value="nickName", required=false)String nickName,
+                                       @RequestParam(value="userPicture", required=false)String userPicture,
+                                       @RequestParam(value="boardId", required=false)int boardId,
+                                       @RequestParam(value="replyId", required=false)int replyId){
 
         if(content.length() ==0 || userId <0 || nickName.length() <= 0 || boardId < 0){
             log.info("request save Reply is null value");
@@ -65,4 +77,20 @@ public class UserController {
 
         return new ResponseEntity<String>("FailSaveReplyofReply", HttpStatus.BAD_REQUEST);
     }
+
+
+    // 대댓글 삭제
+    @DeleteMapping(value = "delete-reply/of-reply/{id}")
+    ResponseEntity<String> deleteReplyOfReply(HttpServletRequest request,
+                                              @PathVariable(value = "id")Integer replyId){
+        int resultNum = auctionSellerBoardReplyService.deleteReplyOfReply(replyId,request);
+
+        if(resultNum == 1){
+            return new ResponseEntity<String>("Success delete Reply", HttpStatus.OK);
+        }
+
+        return new ResponseEntity<String>("Fail Delete Reply", HttpStatus.BAD_REQUEST);
+    }
+
+
 }

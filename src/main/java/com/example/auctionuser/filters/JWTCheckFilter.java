@@ -68,7 +68,7 @@ public class JWTCheckFilter extends BasicAuthenticationFilter {
         }else{
 
             String token = jwtHeader.replace("Bearer ", "");
-
+            System.out.println("체인 넘어 여기까지옴?");
 
 
             try {
@@ -99,7 +99,6 @@ public class JWTCheckFilter extends BasicAuthenticationFilter {
 
             chain.doFilter(request,response);
         }
-
     }
 
 }

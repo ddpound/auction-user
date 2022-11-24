@@ -12,6 +12,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -35,11 +36,11 @@ public class JWTLoginFilter extends UsernamePasswordAuthenticationFilter {
     private final UserJWTUtil userJwtUtil;
 
     public JWTLoginFilter(AuthenticationManager authenticationManager,
-                          UserJWTUtil userJwtUtil, UserModelRepository userModelRepository){
+                          UserJWTUtil userJwtUtil, UserModelRepository userModelRepository) {
 
         this.authenticationManager = authenticationManager;
         this.userJwtUtil = userJwtUtil;
-        this.userModelRepository =userModelRepository;
+        this.userModelRepository = userModelRepository;
         setFilterProcessesUrl("/login/**");
     }
 
@@ -56,7 +57,7 @@ public class JWTLoginFilter extends UsernamePasswordAuthenticationFilter {
         log.info("JWTLoginFilter has been activated.");
         String headerAuth = request.getHeader(HttpHeaders.AUTHORIZATION);
         // 즉 토큰 요청일때
-        if(headerAuth != null){
+        if (headerAuth != null) {
 
             try {
 
@@ -71,7 +72,7 @@ public class JWTLoginFilter extends UsernamePasswordAuthenticationFilter {
                 String username = googlepayload.getEmail();
                 // 프론트 앤드 .env에도 비밀번호 저장해두고 사용할 예정
                 UsernamePasswordAuthenticationToken authenticationToken =
-                        new UsernamePasswordAuthenticationToken(username , userJwtUtil.getUserSecretKey());
+                        new UsernamePasswordAuthenticationToken(username, userJwtUtil.getUserSecretKey());
 
                 // principalDetails의 loadUserByUsername() 함수를 찾아 실행함
                 // 이게 loadUserByUsername()이 올바르게 작동하고 리턴값이 있다면
@@ -115,14 +116,12 @@ public class JWTLoginFilter extends UsernamePasswordAuthenticationFilter {
                 // 보통 에러는 UserDeatilsService returned null 즉 원하는 유저 값이없어서
                 // UserDeatailsService가 null값을 반환하도록 만들어놔서 발생하는 에러
 
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
                 return null;
             }
             // 로그인 신호에 담긴 request를 받아온다
         }
-
 
 
         return null;
@@ -145,9 +144,6 @@ public class JWTLoginFilter extends UsernamePasswordAuthenticationFilter {
         //super.successfulAuthentication(request, response, chain, authResult);
 
         // 이게 있어야 필터가 다음값으로 넘어가줌
-        chain.doFilter(request,response);
+        chain.doFilter(request, response);
     }
-
-
-
 }

@@ -27,4 +27,17 @@ public interface AuctionSellerInterface {
                                             @RequestParam(value="userPicture", required=false)String userPicture,
                                             @RequestParam(value="boardId", required=false)int boardId,
                                             @RequestParam(value="replyId", required=false)int replyId);
+
+    @RequestMapping(method = RequestMethod.DELETE, value = "/seller/delete-reply/{id}")
+    ResponseEntity<String> deleteReply(@RequestHeader("Authorization")String token,
+                                       @RequestHeader("RefreshToken") String reToken,
+                                       @PathVariable(value = "id") Integer id);
+
+    @RequestMapping(method = RequestMethod.DELETE, value = "/seller/delete-reply/of-reply/{id}")
+    ResponseEntity<String> deleteReplyOfReply(@RequestHeader("Authorization")String token,
+                                              @RequestHeader("RefreshToken") String reToken,
+                                              @PathVariable(value = "id") Integer id);
+
+
+
 }

@@ -1,6 +1,7 @@
 package com.example.auctionuser.model;
 
 
+import com.example.auctionuser.model.dto.Address;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.*;
@@ -44,6 +45,10 @@ public class UserModel {
 
     // 썸네일 사진
     private String picture;
+
+    // 유저가 관리하는 주소
+    // address + , + addAddress
+    private String address;
 
     public List<String> getRoleList(){
         if(this.roles.length() > 0){

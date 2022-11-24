@@ -65,4 +65,11 @@ public class UserService {
         return null;
     }
 
+    @Transactional
+    public int saveAddress(){
+
+
+        return 1;
+    }
+
 }
