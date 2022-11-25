@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RequiredArgsConstructor
 @Log4j2
 @RequestMapping(value = "user")
@@ -33,8 +35,16 @@ public class UserInfoController {
     }
 
     @PostMapping(value = "save-address")
-    public ResponseEntity<String> saveAddress(){
+    public ResponseEntity<String> saveAddress(Authentication authentication,
+                                              @RequestParam(value = "address")String address,
+                                              @RequestParam(value = "addAddress")String addAddress){
 
-        return new ResponseEntity<>("success save address" , HttpStatus.OK);
+        int resultNum = userService.saveAddress(authentication,address,addAddress);
+
+        if(resultNum == 1){
+            return new ResponseEntity<>("success save address" , HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>("fail save" , HttpStatus.BAD_REQUEST);
     }
 }

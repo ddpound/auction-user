@@ -1,14 +1,17 @@
 package com.example.auctionuser.service;
 
+import com.example.auctionuser.config.auth.PrincipalDetails;
 import com.example.auctionuser.model.UserModel;
 import com.example.auctionuser.repository.UserModelRepository;
 
 import com.example.modulecommon.frontModel.UserModelFront;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
 
@@ -65,11 +68,23 @@ public class UserService {
         return null;
     }
 
+    // 수정과 저장을 동시에 해줌
     @Transactional
-    public int saveAddress(){
+    public int saveAddress(Authentication authentication,
+                           String address,
+                           String addAddress){
 
+        PrincipalDetails principalDetails =(PrincipalDetails) authentication.getPrincipal();
 
-        return 1;
+        // 영속화
+        UserModel finduserModel = userModelRepository.findByUsername(principalDetails.getUsername());
+
+        if(finduserModel != null){
+            finduserModel.setAddress(address+","+addAddress);
+            return 1;
+        }
+
+        return -1;
     }
 
 }
