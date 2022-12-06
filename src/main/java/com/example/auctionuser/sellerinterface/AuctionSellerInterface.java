@@ -1,5 +1,6 @@
 package com.example.auctionuser.sellerinterface;
 
+import com.example.auctionuser.model.dto.ReservationDetails;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,6 +39,8 @@ public interface AuctionSellerInterface {
                                               @RequestHeader("RefreshToken") String reToken,
                                               @PathVariable(value = "id") Integer id);
 
-
-
+    @RequestMapping(method = RequestMethod.POST, value = "/seller/save-reservation", consumes = "application/json")
+    ResponseEntity<String> saveReservation(@RequestHeader("Authorization")String token,
+                                           @RequestHeader("RefreshToken") String reToken,
+                                           @RequestBody ReservationDetails reservationDetails);
 }

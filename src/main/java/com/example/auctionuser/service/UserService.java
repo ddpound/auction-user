@@ -61,6 +61,7 @@ public class UserService {
                     .role(resultRole.replace("ROLE_",""))
                     .nickName(finduserModel.get().getNickname())
                     .picture(finduserModel.get().getPicture())
+                    .address(finduserModel.get().getAddress())
                     .build();
 
         }
