@@ -26,6 +26,9 @@ public class ReservationController {
                                           HttpServletRequest request){
 
         System.out.println("작동확인 저장 리저베이션");
+        System.out.println(reservationDetails.getBuyerId());
+        System.out.println(reservationDetails.getOptionList());
+        System.out.println(reservationDetails.getProductId());
         System.out.println(reservationDetails);
 
         return null;
