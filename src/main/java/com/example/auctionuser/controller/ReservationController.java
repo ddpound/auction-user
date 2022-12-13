@@ -4,6 +4,7 @@ import com.example.auctionuser.model.dto.ReservationDetails;
 import com.example.auctionuser.service.ReservationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,13 +26,19 @@ public class ReservationController {
     public ResponseEntity saveReservation(@RequestBody ReservationDetails reservationDetails,
                                           HttpServletRequest request){
 
-        System.out.println("작동확인 저장 리저베이션");
+
         System.out.println(reservationDetails.getBuyerId());
         System.out.println(reservationDetails.getOptionList());
         System.out.println(reservationDetails.getProductId());
         System.out.println(reservationDetails);
 
-        return null;
+        int result = reservationService.saveReservation(request,reservationDetails);
+
+        if(result == 1){
+            return new ResponseEntity("success save Reservation", HttpStatus.OK);
+        }
+
+        return new ResponseEntity("Sorry fail save Reservation", HttpStatus.BAD_REQUEST);
     }
 
 

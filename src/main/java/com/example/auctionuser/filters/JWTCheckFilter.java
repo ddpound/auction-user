@@ -68,13 +68,11 @@ public class JWTCheckFilter extends BasicAuthenticationFilter {
         }else{
 
             String token = jwtHeader.replace("Bearer ", "");
-            System.out.println("체인 넘어 여기까지옴?");
-
 
             try {
 
                 String username = JWT.decode(token).getClaim("username").asString();
-                System.out.println(username);
+
                 UserModel userModel =  userModelRepository.findByUsername(username);
 
 
