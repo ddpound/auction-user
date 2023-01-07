@@ -33,6 +33,8 @@ public class ReservationDetails {
 
     private String buyerNickName;
 
+    private String address;
+
     private List<OptionDto> optionList;
 
 

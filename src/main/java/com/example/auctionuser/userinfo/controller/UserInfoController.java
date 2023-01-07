@@ -47,4 +47,14 @@ public class UserInfoController {
 
         return new ResponseEntity<>("fail save" , HttpStatus.BAD_REQUEST);
     }
+
+    /**
+     * 구매 예약 버튼을 눌렀을 때
+     * 주소가 있는지 확인해보는 엔드포인트
+     * */
+    @GetMapping(value = "check-address")
+    public  ResponseEntity<String> checkAddress(Authentication authentication){
+
+        return new ResponseEntity<>(userService.checkAddress(authentication) , HttpStatus.OK);
+    }
 }

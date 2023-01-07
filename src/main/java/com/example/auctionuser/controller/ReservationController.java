@@ -27,11 +27,6 @@ public class ReservationController {
                                           HttpServletRequest request){
 
 
-        System.out.println(reservationDetails.getBuyerId());
-        System.out.println(reservationDetails.getOptionList());
-        System.out.println(reservationDetails.getProductId());
-        System.out.println(reservationDetails);
-
         int result = reservationService.saveReservation(request,reservationDetails);
 
         if(result == 1){

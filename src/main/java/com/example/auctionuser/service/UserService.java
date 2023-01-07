@@ -88,4 +88,23 @@ public class UserService {
         return -1;
     }
 
+    @Transactional(readOnly = true)
+    public String checkAddress(Authentication authentication){
+
+        PrincipalDetails principalDetails =(PrincipalDetails) authentication.getPrincipal();
+
+        // 영속화
+        UserModel finduserModel = userModelRepository.findByUsername(principalDetails.getUsername());
+
+        if(finduserModel != null){
+            if(finduserModel.getAddress() != null){
+                return finduserModel.getAddress();
+            }
+
+            return "";
+        }
+
+        return "";
+    }
+
 }
