@@ -43,4 +43,6 @@ public interface AuctionSellerInterface {
     ResponseEntity<String> saveReservation(@RequestHeader("Authorization")String token,
                                            @RequestHeader("RefreshToken") String reToken,
                                            @RequestBody ReservationDetails reservationDetails);
+
+
 }

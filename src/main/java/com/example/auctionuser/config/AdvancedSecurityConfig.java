@@ -5,6 +5,7 @@ import com.example.auctionuser.filters.JWTLoginFilter;
 import com.example.auctionuser.jwtutil.UserJWTUtil;
 import com.example.auctionuser.repository.UserModelRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,8 +16,12 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
+import java.util.Arrays;
 
 
 @EnableWebSecurity
@@ -26,6 +31,9 @@ import org.springframework.web.filter.CorsFilter;
 public class AdvancedSecurityConfig {
 
     private final UserModelRepository userModelRepository;
+
+    @Value("${securityIpAddress.AuthorizedAddress}")
+    private String authorizedAddress;
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder(){
@@ -53,7 +61,8 @@ public class AdvancedSecurityConfig {
                 .and()
                 // cors config 클래스로 설정을 줄꺼여서 그냥 이대로 주석처리
                 // 유저 패스워드 값으로 로그인을 진행 안함 , 폼로그인 x
-                //.cors().disable()
+                .cors().configurationSource(corsConfigurationSource())
+                .and()
                 .addFilter(corsFilter) // @CrossOrigin (인증 x), 시큐리티 필터 등록 인증
                 // 기본적인 http 로그인방식도 사용하지않는다.
                 .httpBasic().disable()
@@ -68,9 +77,24 @@ public class AdvancedSecurityConfig {
                 .antMatchers("/seller/**").access("hasRole('ROLE_ADMIN')")
                 .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
                 .antMatchers("/error/**").authenticated()
-                .anyRequest().hasIpAddress("192.168.219.108");
+                .anyRequest().hasIpAddress(authorizedAddress);
 
 
         return http.build();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration config = new CorsConfiguration();
+
+        config.setAllowCredentials(true);
+        config.setAllowedOriginPatterns(Arrays.asList("http://localhost:3000"));
+        config.setAllowedMethods(Arrays.asList("HEAD","POST","GET","DELETE","PUT"));
+        config.setAllowCredentials(true);
+        config.setExposedHeaders(Arrays.asList("Authorization","RefreshToken"));
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+        return source;
     }
 }

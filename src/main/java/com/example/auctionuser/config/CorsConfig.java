@@ -6,8 +6,12 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
+import java.util.Arrays;
+
 @Configuration
 public class CorsConfig {
+
+
     // 스프링 시큐리티가 들고있는 cors 필터입니다.
     // 프론트쪽에서 계속 막힌게 이녀석 때문
     @Bean
@@ -28,10 +32,12 @@ public class CorsConfig {
         // 해당 헤더를 모두 허용해줘야 프론트에서 확인받아서 체크할수있다.
 
         // jwt 를 담은 헤더를 리액트 쪽에서 확인할수있다는 뜻
-        config.addExposedHeader("*");
+        config.setExposedHeaders(Arrays.asList("Authorization","RefreshToken"));
 
-        config.addAllowedHeader("*"); // 모든 헤더의 응답을 허용
-        config.addAllowedMethod("*"); // 모든 post,get 등등의 메소드들을 허용
+        config.setAllowedHeaders(Arrays.asList("Authorization","RefreshToken"));
+
+        config.setAllowedMethods(Arrays.asList("GET","PUT","POST","DELETE","OPTIONS"));
+
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
     }
