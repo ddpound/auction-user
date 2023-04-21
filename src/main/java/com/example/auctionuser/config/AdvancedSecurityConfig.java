@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -45,6 +46,8 @@ public class AdvancedSecurityConfig {
     @Bean
     public UserJWTUtil jwtUtil() {return new UserJWTUtil();}
 
+    public final Environment environment;
+
     private final CorsFilter corsFilter;
 
     @Bean
@@ -70,7 +73,8 @@ public class AdvancedSecurityConfig {
                 .addFilter(new JWTLoginFilter(authenticationManager, jwtUtil(),userModelRepository))
                 .addFilter(new JWTCheckFilter(authenticationManager,
                         jwtUtil(),
-                        userModelRepository))
+                        userModelRepository,
+                        environment))
                 .authorizeRequests()
                 //.antMatchers("/join/**", "/login/**", "/health/**", "/actuator/**", "/auth/**").permitAll()
                 .antMatchers("/user/**").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN') or hasRole('ROLE_SELLER')")

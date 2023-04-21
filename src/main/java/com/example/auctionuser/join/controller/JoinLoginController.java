@@ -44,6 +44,9 @@ public class JoinLoginController {
     @Value("${myToken.refreshJWTCookieName}")
     private String REFRESH_COOKIE_NAME;
 
+    @Value("${myToken.userId}")
+    private String REFRESH_COOKIE_ID;
+
     // 설마 Origin localhost가 아니라 ip내부주소로 인증되어서그런건가;;
     @GetMapping (value = "login/token/google")
     //@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true", allowedHeaders = {"Authorization","RefreshToken","Content-Type"})
@@ -55,16 +58,9 @@ public class JoinLoginController {
             String makeMyToken = userJwtUtil.makeAuthToken(principalDetails.getUserModel());
             String makeRefleshToken = userJwtUtil.makeRfreshToken(principalDetails.getUserModel());
 
-            //log.info("make Token : "+makeMyToken);
-            //헤더에 담아 전송, 프론트에 전달
-            response.addHeader("Authorization", "Bearer "+ makeMyToken);
-            response.addHeader("RefreshToken","Bearer "+ makeRefleshToken);
-
-            jwtSuperintendService.saveCheckTokenRepository(principalDetails.getUsername(),makeMyToken,makeRefleshToken);
-
-//            response.addCookie(jwtCookieService.addTokenToCookie(response, makeMyToken, JWT_COOKIE_NAME));
-//            response.addCookie(jwtCookieService.addTokenToCookie(response, makeMyToken, REFRESH_COOKIE_NAME));
-
+            response.addCookie(jwtCookieService.addTokenToCookie(response, makeMyToken, JWT_COOKIE_NAME));
+            response.addCookie(jwtCookieService.addTokenToCookie(response, makeRefleshToken, REFRESH_COOKIE_NAME));
+            response.addCookie(jwtCookieService.addTokenToCookie(response, principalDetails.getUserModel().getUserId() , REFRESH_COOKIE_ID));
 
             log.info("login success : " + principalDetails.getUsername());
             return new ResponseEntity<>(userService.findUserNameFrontUserModel(principalDetails.getUsername(),true) , HttpStatus.OK);

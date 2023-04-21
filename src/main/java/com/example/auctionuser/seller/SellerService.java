@@ -9,11 +9,14 @@ import com.example.auctionuser.repository.UserModelRepository;
 import com.example.modulecommon.jwtutil.JWTUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Optional;
 
 @Log4j2
 @RequiredArgsConstructor
@@ -26,13 +29,32 @@ public class SellerService {
 
     private final SellerCouponRepository sellerCouponRepository;
 
+    @Value("${myToken.cookieJWTName}")
+    private String JWT_COOKIE_NAME;
+
+    @Value("${myToken.refreshJWTCookieName}")
+    private String REFRESH_COOKIE_NAME;
+
+    @Value("${myToken.userId}")
+    private String REFRESH_COOKIE_ID;
+
     @Transactional
     public int sellerRegister(HttpServletRequest request, String id, String code){
+        Cookie[] cookies = request.getCookies();
+        String token = null;
 
-        String jwtHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-        String token = jwtHeader.replace("Bearer ", "");
+        if(cookies == null){
+            return -2; // no cookie
+        }
 
-        UserModel userModel = userModelRepository.findByUsername(JWT.decode(token).getClaim("username").asString());
+        for (Cookie cookie: cookies
+             ) {
+            if(cookie.getName().equals(JWT_COOKIE_NAME)){
+                token = cookie.getValue();
+
+            }
+        }
+        Optional<UserModel> userModel = userModelRepository.findById(JWT.decode(token).getClaim("userId").asInt());
 
         SellerCoupon findSellerCoupon = null;
         try {
@@ -58,8 +80,10 @@ public class SellerService {
         }
 
         // 새쿠폰이라면 그럼 쿠폰 등록자를 해주자
-        findSellerCoupon.setUserModel(userModel);
-        userModel.setRoles("ROLE_USER,ROLE_SELLER");
+        findSellerCoupon.setUserModel(userModel.get());
+        userModel.get().setRoles("ROLE_USER,ROLE_SELLER");
         return 1;
     }
+
+
 }

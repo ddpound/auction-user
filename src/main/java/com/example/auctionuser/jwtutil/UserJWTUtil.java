@@ -58,12 +58,10 @@ public class UserJWTUtil {
     public String makeAuthToken(UserModel user){
         log.info("now New make Token : " + user.getUsername());
         return JWT.create()
-                .withSubject(user.getUsername())
                 .withIssuer("nowAuction")
-                .withClaim("username", user.getUsername()) // 유저이름
                 .withClaim("userId", user.getUserId()) // 유저 아이디
                 .withClaim("exp", Instant.now().getEpochSecond()+AUTH_TIME)
-                .sign(Algorithm.HMAC256(myKey));
+                .sign(Algorithm.HMAC256(myKey+user.getUserId()));
 
         // EpochSecond 에폭세컨드를 이용해 exp이름을 붙여 직접 시간을 지정해준다
     }
@@ -75,11 +73,10 @@ public class UserJWTUtil {
     public String makeRfreshToken(UserModel user){
         log.info("now New make refresh Token : " + user.getUsername());
         return JWT.create()
-                .withSubject(user.getUsername())
                 .withIssuer("nowAuction")
                 .withClaim("refresh","refresh")
                 .withClaim("exp", Instant.now().getEpochSecond()+REFRESH_TIME)
-                .sign(Algorithm.HMAC256(myKey));
+                .sign(Algorithm.HMAC256(myKey+user.getUserId()));
 
         // EpochSecond 에폭세컨드를 이용해 exp이름을 붙여 직접 시간을 지정해준다
         // 만료시간은 리프레쉬 토큰 시간에 맞춰서 넣는다
@@ -134,6 +131,36 @@ public class UserJWTUtil {
 
         try {
             DecodedJWT verify = JWT.require(Algorithm.HMAC256(myKey)).build().verify(token);
+            log.info("success myToken verify");
+            returnMap.put(1, verify);
+            return returnMap;
+        }catch (TokenExpiredException e){
+            log.info("The myToken has expired"); // 토큰 유효시간이 지남
+
+            DecodedJWT decodeJWT = JWT.decode(token);
+            returnMap.put(-2, decodeJWT);
+
+            // 재발급이 필요, 리프레시 토큰이 있나 체크해야함
+            return returnMap;
+        }
+
+        catch (Exception e){
+            //e.printStackTrace();
+            DecodedJWT decodeJWT = JWT.decode(token);
+
+            log.info("myToken fail verify : " + decodeJWT);
+            // 실패시
+            returnMap.put(-1, decodeJWT);
+            return returnMap;
+
+        }
+    }
+
+    public Map<Integer, DecodedJWT> returnMapMyTokenVerify(String token,int userId){
+        Map<Integer,DecodedJWT> returnMap = new HashMap<>();
+
+        try {
+            DecodedJWT verify = JWT.require(Algorithm.HMAC256(myKey+userId)).build().verify(token);
             log.info("success myToken verify");
             returnMap.put(1, verify);
             return returnMap;
